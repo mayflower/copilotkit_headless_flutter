@@ -1,0 +1,20 @@
+name: Documentation issue
+description: Report missing, unclear, or stale documentation.
+title: "docs: "
+labels:
+  - documentation
+body:
+  - type: textarea
+    id: location
+    attributes:
+      label: Location
+      description: Link or path to the affected page or API.
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: Issue
+      description: What is confusing, missing, or incorrect?
+    validations:
+      required: true

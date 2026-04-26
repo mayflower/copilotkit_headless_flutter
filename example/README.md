@@ -1,26 +1,23 @@
-# Example
+# CopilotKit Headless Flutter Example
 
-This directory contains small integration snippets for apps that consume the
-package. The production app should provide its own transport, auth, persistence,
-and dependency-injection adapters.
+This example runs against an in-process mock AG-UI agent. It shows:
 
-```dart
-import 'package:copilotkit_headless_flutter/copilotkit_headless_flutter.dart';
+- `CopilotHeadlessChatController`
+- `CopilotActionRegistry`
+- local frontend tool execution
+- tool-result follow-up to the agent
+- shared-state rendering
 
-final actionRegistry = CopilotActionRegistry(
-  actions: [
-    CopilotAction(
-      name: 'selectItem',
-      parameters: const [
-        CopilotActionParameter(
-          name: 'id',
-          type: CopilotActionParameterType.string,
-        ),
-      ],
-      handler: (args, context) async {
-        return CopilotActionResult(payload: {'selected': args['id']});
-      },
-    ),
-  ],
-);
+Run it with:
+
+```sh
+flutter pub get
+flutter run -d chrome
+```
+
+Or validate it with:
+
+```sh
+flutter analyze
+flutter test
 ```
