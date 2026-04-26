@@ -1,0 +1,7 @@
+{
+  "type": "ACTIVITY_DELTA",
+  "delta": {
+    "status": "running",
+    "progress": 0.45
+  }
+}

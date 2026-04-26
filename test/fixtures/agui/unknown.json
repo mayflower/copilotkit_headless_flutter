@@ -1,0 +1,7 @@
+{
+  "type": "SOMETHING_FUTURE",
+  "futureField": 7,
+  "payload": {
+    "flag": true
+  }
+}

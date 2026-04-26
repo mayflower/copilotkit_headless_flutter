@@ -1,0 +1,10 @@
+{
+  "type": "MESSAGES_SNAPSHOT",
+  "messages": [
+    {
+      "id": "assistant_snapshot_1",
+      "role": "assistant",
+      "content": "Hydrated reply"
+    }
+  ]
+}

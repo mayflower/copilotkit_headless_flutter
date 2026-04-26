@@ -1,0 +1,43 @@
+library;
+
+export 'src/agui/capabilities/capability_service.dart'
+    show CapabilityAvailability, CapabilityService, CapabilitySnapshot;
+export 'src/agui/protocol/agui_event.dart';
+export 'src/agui/protocol/agui_event_envelope.dart';
+export 'src/agui/protocol/agui_json.dart';
+export 'src/agui/protocol/agui_message.dart';
+export 'src/agui/protocol/connect_agent_input.dart';
+export 'src/agui/protocol/run_agent_input.dart';
+export 'src/agui/reducer/activity_reducer.dart';
+export 'src/agui/reducer/agui_reducer.dart';
+export 'src/agui/reducer/debug_reducer.dart';
+export 'src/agui/reducer/json_patch_service.dart'
+    show JsonPatchException, JsonPatchService;
+export 'src/agui/reducer/lifecycle_reducer.dart';
+export 'src/agui/reducer/message_reducer.dart';
+export 'src/agui/reducer/reasoning_reducer.dart';
+export 'src/agui/reducer/shared_state_reducer.dart';
+export 'src/agui/reducer/tool_call_reducer.dart';
+export 'src/agui/session/shared_state_document.dart';
+export 'src/agui/session/thread_session.dart';
+export 'src/agui/session/thread_session_connection_coordinator.dart';
+export 'src/agui/session/thread_session_controller.dart';
+export 'src/agui/session/thread_state_snapshot.dart';
+export 'src/agui/transport/agent_transport.dart';
+export 'src/agui/transport/agui_event_decoder.dart';
+export 'src/agui/transport/agui_http_transport.dart';
+export 'src/agui/transport/agui_transport_config.dart';
+export 'src/agui/transport/sse_frame_parser.dart';
+export 'src/copilotkit/copilot_action.dart';
+export 'src/copilotkit/copilot_action_renderer.dart';
+export 'src/copilotkit/copilot_action_response_coordinator.dart';
+export 'src/copilotkit/copilot_coagent_state.dart';
+export 'src/copilotkit/copilot_coagent_state_renderer.dart';
+export 'src/copilotkit/copilot_headless_chat_controller.dart';
+export 'src/copilotkit/copilot_readable_registry.dart';
+export 'src/copilotkit/copilot_runtime_config.dart';
+export 'src/copilotkit/copilot_tool_run_loop.dart';
+export 'src/features/tools/application/frontend_tool_executor.dart';
+export 'src/features/tools/application/frontend_tool_registry.dart';
+export 'src/features/tools/application/tool_renderer_registry.dart';
+export 'src/features/tools/domain/frontend_tool.dart';

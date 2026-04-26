@@ -1,0 +1,7 @@
+{
+  "type": "CUSTOM",
+  "name": "MOBILE_HINT",
+  "payload": {
+    "hint": "focusComposer"
+  }
+}

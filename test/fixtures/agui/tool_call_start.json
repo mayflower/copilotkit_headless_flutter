@@ -1,0 +1,10 @@
+{
+  "type": "TOOL_CALL_START",
+  "toolCallId": "tool_call_1",
+  "toolName": "pick_file",
+  "args": {
+    "accept": [
+      "application/pdf"
+    ]
+  }
+}

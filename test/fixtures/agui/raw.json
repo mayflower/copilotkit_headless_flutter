@@ -1,0 +1,7 @@
+{
+  "type": "RAW",
+  "data": {
+    "traceId": "trace_123",
+    "span": "agent.run"
+  }
+}

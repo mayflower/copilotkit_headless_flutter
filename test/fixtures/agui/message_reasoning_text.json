@@ -1,0 +1,10 @@
+{
+  "id": "msg_reasoning_1",
+  "role": "reasoning",
+  "content": [
+    {
+      "type": "text",
+      "text": "The agent selected the compliance checklist because the user requested a review."
+    }
+  ]
+}

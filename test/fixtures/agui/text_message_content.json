@@ -1,0 +1,5 @@
+{
+  "type": "TEXT_MESSAGE_CONTENT",
+  "messageId": "assistant_stream_1",
+  "delta": "Streaming delta"
+}

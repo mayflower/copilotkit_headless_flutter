@@ -1,0 +1,21 @@
+{
+  "id": "msg_multimodal",
+  "role": "developer",
+  "content": [
+    {
+      "type": "text",
+      "text": "Please compare the attached artifacts."
+    },
+    {
+      "type": "image",
+      "url": "https://cdn.example.com/images/diff.png",
+      "mimeType": "image/png"
+    },
+    {
+      "type": "file",
+      "assetId": "asset_pdf_7",
+      "name": "spec.pdf",
+      "mimeType": "application/pdf"
+    }
+  ]
+}
