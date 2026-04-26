@@ -62,7 +62,7 @@ jobs:
           persist-credentials: false
 
       - name: Lint Markdown
-        uses: DavidAnson/markdownlint-cli2-action@30a0e04f1870d58f8d717450cc6134995f993c63 # v21
+        uses: DavidAnson/markdownlint-cli2-action@07035fd053f7be764496c0f8d8f9f41f98305101 # v22
 
   workflow-quality:
     name: Workflow Quality
@@ -105,4 +105,5 @@ jobs:
         run: go install github.com/zricethezav/gitleaks/v8@v8.28.0
 
       - name: Scan for secrets
-        run: $HOME/go/bin/gitleaks detect --source . --redact --no-git --verbose
+        run: |
+          "$HOME/go/bin/gitleaks" detect --source . --redact --no-git --verbose
