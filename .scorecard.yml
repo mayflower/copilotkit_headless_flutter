@@ -1,0 +1,9 @@
+annotations:
+  - checks:
+      - packaging
+    reasons:
+      - reason: not-supported # Dart pub.dev automated publishing is configured, but Scorecard does not detect Dart publishing workflows.
+  - checks:
+      - fuzzing
+    reasons:
+      - reason: not-supported # Dart fuzzing integrations are not currently detected by Scorecard.
