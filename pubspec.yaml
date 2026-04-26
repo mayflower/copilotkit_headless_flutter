@@ -1,7 +1,6 @@
 name: copilotkit_headless_flutter
 description: Headless CopilotKit-style Flutter APIs over AG-UI for local tools, state, renderers, and agent transport.
 version: 0.1.0
-publish_to: none
 homepage: https://github.com/mayflower/copilotkit_headless_flutter
 repository: https://github.com/mayflower/copilotkit_headless_flutter
 issue_tracker: https://github.com/mayflower/copilotkit_headless_flutter/issues

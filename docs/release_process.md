@@ -43,3 +43,13 @@ dependencies:
       tag_pattern: v{{version}}
     version: ^0.1.0
 ```
+
+## pub.dev
+
+The release workflow publishes tags that match `v{{version}}` through pub.dev
+automated publishing. A maintainer must publish the first package version
+manually and enable GitHub Actions automated publishing for:
+
+- Repository: `mayflower/copilotkit_headless_flutter`
+- Tag pattern: `v{{version}}`
+- Environment: `pub.dev`

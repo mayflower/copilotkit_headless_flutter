@@ -11,7 +11,12 @@ up security fixes.
 Please do not open public issues for security vulnerabilities.
 
 Use GitHub private vulnerability reporting or create a private security advisory
-for this repository. Include:
+for this repository:
+
+- [Report a vulnerability privately](https://github.com/mayflower/copilotkit_headless_flutter/security/advisories/new)
+- [View this repository's security policy](https://github.com/mayflower/copilotkit_headless_flutter/security/policy)
+
+Include:
 
 - Affected version or commit.
 - Minimal reproduction or exploit sketch.

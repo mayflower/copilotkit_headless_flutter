@@ -1,7 +1,7 @@
 # CopilotKit Headless Flutter
 
 [![CI](https://github.com/mayflower/copilotkit_headless_flutter/actions/workflows/ci.yml/badge.svg)](https://github.com/mayflower/copilotkit_headless_flutter/actions/workflows/ci.yml)
-[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/mayflower/copilotkit_headless_flutter/badge)](https://securityscorecards.dev/viewer/?uri=github.com/mayflower/copilotkit_headless_flutter)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/mayflower/copilotkit_headless_flutter/badge)](https://securityscorecards.dev/viewer/?uri=github.com%2Fmayflower%2Fcopilotkit_headless_flutter)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 Headless CopilotKit-style Flutter APIs over AG-UI. The package provides the
@@ -112,7 +112,7 @@ shared state without a backend.
 | Flutter | Package API supports Flutter clients; CI uses stable Flutter |
 | AG-UI | AG-UI remains the wire protocol |
 | CopilotKit | Structural parity for headless actions, tools, renderers, and shared state |
-| Distribution | Public GitHub repository; pub.dev publishing planned |
+| Distribution | Public GitHub repository; pub.dev publishing workflow included |
 
 ## Development
 
