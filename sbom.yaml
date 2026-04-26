@@ -1,0 +1,12 @@
+type: spdx
+
+spdx:
+  SPDXFormat: 'tagvalue'
+  documentCreation:
+    DocumentName: 'CopilotKit Headless Flutter SBOM'
+    Creator:
+      - 'Organization: Mayflower GmbH'
+  package:
+    PackageSupplier: 'Organization: Mayflower GmbH'
+    PackageOriginator: 'Organization: Mayflower GmbH'
+    PackageDescription: '<text>Headless CopilotKit-style Flutter APIs over AG-UI for local tools, state, renderers, and agent transport.</text>'

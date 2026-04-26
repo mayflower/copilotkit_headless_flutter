@@ -1,0 +1,90 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: read
+
+jobs:
+  github-release:
+    name: GitHub release artifacts
+    runs-on: ubuntu-latest
+    permissions:
+      attestations: write
+      artifact-metadata: write
+      contents: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Check formatting
+        run: dart format --set-exit-if-changed .
+
+      - name: Analyze package
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Check API docs
+        run: dart doc --dry-run .
+
+      - name: Check pub.dev package
+        run: dart pub publish --dry-run
+
+      - name: Generate release assets
+        env:
+          VERSION_TAG: ${{ github.ref_name }}
+        run: |
+          mkdir -p dist
+          git archive \
+            --format=tar.gz \
+            --prefix="copilotkit_headless_flutter-${VERSION_TAG}/" \
+            --output="dist/copilotkit_headless_flutter-${VERSION_TAG}.tar.gz" \
+            HEAD
+          dart pub global activate sbom 2.1.2
+          "$HOME/.pub-cache/bin/sbom"
+          mv sbom.spdx dist/sbom.spdx
+          shasum -a 256 dist/* > dist/SHA256SUMS
+          awk '
+            /^## 0.1.0/ { capture = 1; print; next }
+            /^## / && capture { exit }
+            capture { print }
+          ' CHANGELOG.md > dist/release-notes.md
+
+      - name: Attest release assets
+        uses: actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26 # v4
+        with:
+          subject-path: |
+            dist/copilotkit_headless_flutter-${{ github.ref_name }}.tar.gz
+            dist/sbom.spdx
+            dist/SHA256SUMS
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION_TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$VERSION_TAG" \
+            "dist/copilotkit_headless_flutter-${VERSION_TAG}.tar.gz" \
+            dist/sbom.spdx \
+            dist/SHA256SUMS \
+            --verify-tag \
+            --title "$VERSION_TAG" \
+            --notes-file dist/release-notes.md

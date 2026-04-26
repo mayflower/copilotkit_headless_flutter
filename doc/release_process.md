@@ -11,6 +11,7 @@ make example-check
 make quality
 make pana
 make pub-outdated
+dart pub publish --dry-run
 ```
 
 ## Versioning
@@ -26,10 +27,18 @@ called out clearly in `CHANGELOG.md`.
 
 ## Tags
 
-Use `v{{version}}` tags, for example:
+Use signed `v{{version}}` tags when possible. For example:
 
 ```sh
-git tag v0.1.0
+git tag -s v0.1.0 -m "v0.1.0"
+git push origin v0.1.0
+```
+
+If local GPG signing is not available, use an annotated tag and set up signing
+before the next release:
+
+```sh
+git tag -a v0.1.0 -m "v0.1.0"
 git push origin v0.1.0
 ```
 
@@ -53,3 +62,15 @@ manually and enable GitHub Actions automated publishing for:
 - Repository: `mayflower/copilotkit_headless_flutter`
 - Tag pattern: `v{{version}}`
 - Environment: `pub.dev`
+
+## GitHub Release Artifacts
+
+Pushing a release tag also creates a GitHub Release with:
+
+- Source archive: `copilotkit_headless_flutter-v{{version}}.tar.gz`
+- SPDX SBOM: `sbom.spdx`
+- Checksums: `SHA256SUMS`
+- GitHub artifact attestations for all attached assets
+
+The pub.dev package remains the canonical install artifact. GitHub release
+assets are for review, provenance, and enterprise intake.

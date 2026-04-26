@@ -31,16 +31,14 @@ stay in the consuming application as adapters.
 
 ## Install
 
-Add the package from GitHub:
+Add the package from pub.dev:
 
 ```yaml
 dependencies:
-  copilotkit_headless_flutter:
-    git:
-      url: https://github.com/mayflower/copilotkit_headless_flutter.git
+  copilotkit_headless_flutter: ^0.1.0
 ```
 
-For reproducible builds, pin a release tag:
+You can also consume a tagged Git release directly:
 
 ```yaml
 dependencies:
@@ -50,9 +48,6 @@ dependencies:
       tag_pattern: v{{version}}
     version: ^0.1.0
 ```
-
-When the package is published to pub.dev, prefer the normal hosted dependency
-syntax from the package page.
 
 ## Quick Start
 
@@ -96,12 +91,12 @@ shared state without a backend.
 
 ## Documentation
 
-- [Architecture](docs/architecture.md)
-- [Actions and frontend tools](docs/actions_and_tools.md)
-- [Generative UI and HITL](docs/generative_ui.md)
-- [CoAgent shared state](docs/coagent_state.md)
-- [Migration from app-local code](docs/migration.md)
-- [Release process](docs/release_process.md)
+- [Architecture](doc/architecture.md)
+- [Actions and frontend tools](doc/actions_and_tools.md)
+- [Generative UI and HITL](doc/generative_ui.md)
+- [CoAgent shared state](doc/coagent_state.md)
+- [Migration from app-local code](doc/migration.md)
+- [Release process](doc/release_process.md)
 - [Roadmap](ROADMAP.md)
 
 ## Compatibility
@@ -112,7 +107,7 @@ shared state without a backend.
 | Flutter | Package API supports Flutter clients; CI uses stable Flutter |
 | AG-UI | AG-UI remains the wire protocol |
 | CopilotKit | Structural parity for headless actions, tools, renderers, and shared state |
-| Distribution | Public GitHub repository; pub.dev publishing workflow included |
+| Distribution | pub.dev package; GitHub releases include source archive, SBOM, checksums, and attestations |
 
 ## Development
 
