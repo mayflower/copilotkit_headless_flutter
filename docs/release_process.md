@@ -6,15 +6,11 @@ Run these before tagging:
 
 ```sh
 flutter pub get
-dart format --set-exit-if-changed .
-flutter analyze
-flutter test
-dart doc --dry-run .
-
-cd example
-flutter pub get
-flutter analyze
-flutter test
+make package-check
+make example-check
+make quality
+make pana
+make pub-outdated
 ```
 
 ## Versioning

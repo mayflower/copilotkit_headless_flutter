@@ -32,8 +32,8 @@ jobs:
       - name: Analyze package
         run: flutter analyze
 
-      - name: Run package tests
-        run: flutter test
+      - name: Run package tests with coverage
+        run: flutter test --coverage
 
       - name: Check API docs
         run: dart doc --dry-run .

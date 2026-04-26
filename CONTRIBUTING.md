@@ -8,20 +8,37 @@ Use the Flutter stable channel and the Dart SDK required by `pubspec.yaml`.
 
 ```sh
 flutter pub get
-dart format --set-exit-if-changed .
-flutter analyze
-flutter test
-dart doc --dry-run .
+make package-check
 ```
 
 The example app has its own package context:
 
 ```sh
-cd example
-flutter pub get
-flutter analyze
-flutter test
+make example-check
 ```
+
+## Local Quality Tools
+
+Install these tools if you want to run the full local quality suite:
+
+- `actionlint` for GitHub Actions workflow linting.
+- `zizmor` for GitHub Actions security analysis.
+- `gitleaks` for local secret scanning.
+- Node.js with `npx` for `markdownlint-cli2`.
+
+Useful targets:
+
+```sh
+make quality
+make coverage
+make pana
+make pub-outdated
+make tooling-check
+```
+
+`make quality` runs package checks, example checks, Markdown linting, workflow
+linting, workflow security analysis, and secret scanning. `make pana` runs a
+pub.dev-style package quality analysis on a temporary copy of the repository.
 
 ## Project Boundaries
 

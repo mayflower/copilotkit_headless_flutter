@@ -1,0 +1,105 @@
+name: Quality
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  actions: read
+  contents: read
+  pull-requests: read
+  security-events: write
+
+jobs:
+  package-quality:
+    name: Package Quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Check dependency freshness
+        continue-on-error: true
+        run: flutter pub outdated
+
+      - name: Install pana
+        run: dart pub global activate pana
+
+      - name: Run pub.dev package analysis
+        run: |
+          tmp_dir="$(mktemp -d)"
+          trap 'rm -rf "$tmp_dir"' EXIT
+          mkdir -p "$tmp_dir/package"
+          tar \
+            --exclude='./.git' \
+            --exclude='./.dart_tool' \
+            --exclude='./build' \
+            --exclude='./coverage' \
+            --exclude='./example/.dart_tool' \
+            --exclude='./example/build' \
+            -cf - . | tar -xf - -C "$tmp_dir/package"
+          dart pub global run pana --exit-code-threshold 20 "$tmp_dir/package"
+
+  docs:
+    name: Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Lint Markdown
+        uses: DavidAnson/markdownlint-cli2-action@v21
+
+  workflow-quality:
+    name: Workflow Quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Lint GitHub Actions workflows
+        uses: reviewdog/action-actionlint@v1
+        with:
+          reporter: github-check
+          fail_level: error
+
+      - name: Audit GitHub Actions workflows
+        uses: zizmorcore/zizmor-action@v0.3.0
+        with:
+          inputs: .github/workflows
+          advanced-security: false
+          annotations: true
+
+  security:
+    name: Security
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Review dependency changes
+        if: github.event_name == 'pull_request'
+        uses: actions/dependency-review-action@v4
+
+      - name: Install Gitleaks
+        run: |
+          mkdir -p "$HOME/.local/bin"
+          curl -sSfL https://raw.githubusercontent.com/gitleaks/gitleaks/master/install.sh \
+            | sh -s -- -b "$HOME/.local/bin"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Scan for secrets
+        run: gitleaks detect --source . --redact --no-git --verbose

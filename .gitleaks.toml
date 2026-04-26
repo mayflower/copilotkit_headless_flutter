@@ -1,0 +1,4 @@
+title = "copilotkit_headless_flutter"
+
+[extend]
+useDefault = true

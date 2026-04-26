@@ -31,15 +31,16 @@ stay in the consuming application as adapters.
 
 ## Install
 
-For local development, consume the sibling checkout from the app:
+Add the package from GitHub:
 
 ```yaml
 dependencies:
   copilotkit_headless_flutter:
-    path: ../copilotkit_headless_flutter
+    git:
+      url: https://github.com/mayflower/copilotkit_headless_flutter.git
 ```
 
-For release builds, pin a tagged Git revision:
+For reproducible builds, pin a release tag:
 
 ```yaml
 dependencies:
@@ -50,7 +51,8 @@ dependencies:
     version: ^0.1.0
 ```
 
-The package is not published to pub.dev yet.
+When the package is published to pub.dev, prefer the normal hosted dependency
+syntax from the package page.
 
 ## Quick Start
 
@@ -110,28 +112,33 @@ shared state without a backend.
 | Flutter | Package API supports Flutter clients; CI uses stable Flutter |
 | AG-UI | AG-UI remains the wire protocol |
 | CopilotKit | Structural parity for headless actions, tools, renderers, and shared state |
-| Publishing | Private Git dependency for now |
+| Distribution | Public GitHub repository; pub.dev publishing planned |
 
 ## Development
 
 Run the package checks before opening a PR or tagging a release:
 
 ```sh
-flutter pub get
-dart format --set-exit-if-changed .
-flutter analyze
-flutter test
-dart doc --dry-run .
+make package-check
 ```
 
 Run the example checks separately:
 
 ```sh
-cd example
-flutter pub get
-flutter analyze
-flutter test
+make example-check
 ```
+
+Run the broader local quality suite when touching workflows, documentation, or
+release metadata:
+
+```sh
+make quality
+make pana
+make pub-outdated
+```
+
+`make quality` expects `actionlint`, `zizmor`, `gitleaks`, and Node's `npx` to
+be installed locally. CI installs or runs those tools in GitHub Actions.
 
 ## Community
 

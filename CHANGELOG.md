@@ -7,6 +7,9 @@
 * Added a runnable example app with a mock AG-UI transport and local frontend
   tool runloop demonstration.
 * Added package metadata for repository, issue tracker, homepage, and topics.
+* Added local quality targets and GitHub Actions checks for package scoring,
+  dependency freshness, Markdown linting, workflow linting, workflow security,
+  dependency review, coverage, and secret scanning.
 
 ## 0.1.0
 
