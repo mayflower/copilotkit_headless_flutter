@@ -10,20 +10,13 @@ class ToolCallReducer implements AgUiReducer {
 
   @override
   ThreadSession reduce(ThreadSession current, AgUiEventEnvelope event) {
-    final toolCallId =
-        event.stringValue('toolCallId') ?? event.stringValue('tool_call_id');
+    final toolCallId = event.stringValue('toolCallId');
     if (toolCallId == null) {
       return current;
     }
 
     final existing = current.toolCalls[toolCallId];
-    final name =
-        event.stringValue('toolCallName') ??
-        event.stringValue('toolName') ??
-        event.stringValue('tool_call_name') ??
-        event.stringValue('tool_name') ??
-        existing?.name ??
-        'tool';
+    final name = event.stringValue('toolCallName') ?? existing?.name ?? 'tool';
 
     final nextToolCall = switch (event.type) {
       'TOOL_CALL_CHUNK' => _reduceChunk(existing, event, toolCallId, name),

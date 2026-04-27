@@ -11,10 +11,7 @@ class LifecycleReducer implements AgUiReducer {
       case 'RUN_STARTED':
         return current.copyWith(
           runStatus: RunStatus.running,
-          activeRunId:
-              event.stringValue('runId') ??
-              event.stringValue('run_id') ??
-              current.activeRunId,
+          activeRunId: event.stringValue('runId') ?? current.activeRunId,
           lastErrorMessage: null,
         );
       case 'RUN_FINISHED':

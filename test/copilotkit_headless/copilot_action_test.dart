@@ -29,10 +29,10 @@ void main() {
 
       expect(definition.name, 'addTodoItem');
       expect(definition.description, 'Add a new todo item to the list');
-      expect(definition.parameters?['type'], 'object');
-      expect(definition.parameters?['required'], <String>['todoText']);
-      final properties =
-          definition.parameters?['properties'] as Map<String, Object?>;
+      final parameters = definition.parameters as Map<String, Object?>;
+      expect(parameters['type'], 'object');
+      expect(parameters['required'], <String>['todoText']);
+      final properties = parameters['properties'] as Map<String, Object?>;
       expect(properties['todoText'], <String, Object?>{
         'type': 'string',
         'description': 'The text of the todo item to add',
@@ -41,7 +41,7 @@ void main() {
         'type': 'array',
         'items': <String, Object?>{'type': 'string'},
       });
-      expect(definition.parameters?['x-copilotkit'], <String, Object?>{
+      expect(parameters['x-copilotkit'], <String, Object?>{
         'available': 'remote',
         'followUp': false,
         'renderMode': 'render',

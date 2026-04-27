@@ -52,7 +52,7 @@ void main() {
         context: const FrontendToolExecutionContext(),
       );
 
-      expect(message.metadata['error'], isTrue);
+      expect(message.metadata['error'], 'true');
       expect(message.metadata['toolCallId'], 'call-1');
     });
 

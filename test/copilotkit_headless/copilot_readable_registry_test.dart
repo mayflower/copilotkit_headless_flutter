@@ -23,11 +23,9 @@ void main() {
 
     final entries = registry.toContextEntries();
 
-    expect(entries.map((entry) => entry.key), <String>['customer']);
-    expect(entries.single.value, <String, Object?>{
-      'description': 'Current customer',
-      'value': <String, Object?>{'id': 'customer-1'},
-      'category': 'crm',
-    });
+    expect(entries.single.description, contains('Current customer'));
+    expect(entries.single.description, contains('Category: crm'));
+    expect(entries.single.description, contains('Key: customer'));
+    expect(entries.single.value, '{"id":"customer-1"}');
   });
 }

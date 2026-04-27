@@ -26,37 +26,135 @@ final class AgUiTextContentPart extends AgUiMessageContentPart {
   Object toJson() => <String, Object?>{'type': 'text', 'text': text};
 }
 
-final class AgUiImageContentPart extends AgUiMessageContentPart {
-  const AgUiImageContentPart({required this.url, this.mimeType});
+enum AgUiInputSourceType { data, url }
 
-  final String url;
-  final String? mimeType;
-
-  @override
-  Object toJson() => <String, Object?>{
-    'type': 'image',
-    'url': url,
-    if (mimeType != null) 'mimeType': mimeType,
-  };
-}
-
-final class AgUiFileContentPart extends AgUiMessageContentPart {
-  const AgUiFileContentPart({
-    required this.assetId,
-    required this.name,
+class AgUiInputContentSource {
+  const AgUiInputContentSource({
+    required this.type,
+    required this.value,
     this.mimeType,
   });
 
-  final String assetId;
-  final String name;
+  const AgUiInputContentSource.data({
+    required String value,
+    required String mimeType,
+  }) : this(type: AgUiInputSourceType.data, value: value, mimeType: mimeType);
+
+  const AgUiInputContentSource.url({required String value, String? mimeType})
+    : this(type: AgUiInputSourceType.url, value: value, mimeType: mimeType);
+
+  final AgUiInputSourceType type;
+  final String value;
   final String? mimeType;
+
+  Map<String, Object?> toJson() => <String, Object?>{
+    'type': switch (type) {
+      AgUiInputSourceType.data => 'data',
+      AgUiInputSourceType.url => 'url',
+    },
+    'value': value,
+    if (mimeType != null) 'mimeType': mimeType,
+  };
+
+  static AgUiInputContentSource fromJson(Object? value) {
+    final object = normalizeObjectMap(value);
+    final type = normalizeString(object['type'])?.toLowerCase();
+    return AgUiInputContentSource(
+      type: type == 'data' ? AgUiInputSourceType.data : AgUiInputSourceType.url,
+      value: normalizeString(object['value']) ?? '',
+      mimeType: normalizeString(object['mimeType']),
+    );
+  }
+}
+
+abstract base class AgUiSourcedContentPart extends AgUiMessageContentPart {
+  const AgUiSourcedContentPart({required this.source, this.metadata});
+
+  final AgUiInputContentSource source;
+  final Object? metadata;
+
+  String get wireType;
+
+  String get url => source.value;
+  String? get mimeType => source.mimeType;
 
   @override
   Object toJson() => <String, Object?>{
-    'type': 'file',
-    'assetId': assetId,
-    'name': name,
-    if (mimeType != null) 'mimeType': mimeType,
+    'type': wireType,
+    'source': source.toJson(),
+    if (metadata != null) 'metadata': metadata,
+  };
+}
+
+final class AgUiImageContentPart extends AgUiSourcedContentPart {
+  const AgUiImageContentPart({required super.source, super.metadata});
+
+  AgUiImageContentPart.url({
+    required String url,
+    String? mimeType,
+    Object? metadata,
+  }) : this(
+         source: AgUiInputContentSource.url(value: url, mimeType: mimeType),
+         metadata: metadata,
+       );
+
+  AgUiImageContentPart.data({
+    required String data,
+    required String mimeType,
+    Object? metadata,
+  }) : this(
+         source: AgUiInputContentSource.data(value: data, mimeType: mimeType),
+         metadata: metadata,
+       );
+
+  @override
+  String get wireType => 'image';
+}
+
+final class AgUiAudioContentPart extends AgUiSourcedContentPart {
+  const AgUiAudioContentPart({required super.source, super.metadata});
+
+  @override
+  String get wireType => 'audio';
+}
+
+final class AgUiVideoContentPart extends AgUiSourcedContentPart {
+  const AgUiVideoContentPart({required super.source, super.metadata});
+
+  @override
+  String get wireType => 'video';
+}
+
+final class AgUiDocumentContentPart extends AgUiSourcedContentPart {
+  const AgUiDocumentContentPart({required super.source, super.metadata});
+
+  @override
+  String get wireType => 'document';
+}
+
+final class AgUiBinaryContentPart extends AgUiMessageContentPart {
+  const AgUiBinaryContentPart({
+    required this.mimeType,
+    this.id,
+    this.url,
+    this.data,
+    this.filename,
+  });
+
+  final String mimeType;
+  final String? id;
+  final String? url;
+  final String? data;
+  final String? filename;
+
+  @override
+  Object toJson() => <String, Object?>{
+    'type': 'binary',
+    'mimeType': mimeType,
+    if (id != null) 'id': id,
+    if (url != null) 'url': url,
+    if (data != null) 'data': data,
+    if (filename != null) 'filename': filename,
   };
 }
 
@@ -123,13 +221,27 @@ class AgUiMessage {
     final type = normalizeString(object['type'])?.toLowerCase();
     return switch (type) {
       'image' => AgUiImageContentPart(
-        url: normalizeString(object['url']) ?? '',
-        mimeType: normalizeString(object['mimeType']),
+        source: AgUiInputContentSource.fromJson(object['source']),
+        metadata: object['metadata'],
       ),
-      'file' => AgUiFileContentPart(
-        assetId: normalizeString(object['assetId']) ?? '',
-        name: normalizeString(object['name']) ?? '',
-        mimeType: normalizeString(object['mimeType']),
+      'audio' => AgUiAudioContentPart(
+        source: AgUiInputContentSource.fromJson(object['source']),
+        metadata: object['metadata'],
+      ),
+      'video' => AgUiVideoContentPart(
+        source: AgUiInputContentSource.fromJson(object['source']),
+        metadata: object['metadata'],
+      ),
+      'document' => AgUiDocumentContentPart(
+        source: AgUiInputContentSource.fromJson(object['source']),
+        metadata: object['metadata'],
+      ),
+      'binary' => AgUiBinaryContentPart(
+        mimeType: normalizeString(object['mimeType']) ?? '',
+        id: normalizeString(object['id']),
+        url: normalizeString(object['url']),
+        data: normalizeString(object['data']),
+        filename: normalizeString(object['filename']),
       ),
       _ => AgUiTextContentPart(
         text:

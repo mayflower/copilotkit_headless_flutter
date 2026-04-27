@@ -1,7 +1,17 @@
 {
   "type": "ACTIVITY_DELTA",
-  "delta": {
-    "status": "running",
-    "progress": 0.45
-  }
+  "messageId": "activity_1",
+  "activityType": "task",
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/status",
+      "value": "running"
+    },
+    {
+      "op": "add",
+      "path": "/progress",
+      "value": 0.45
+    }
+  ]
 }

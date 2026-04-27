@@ -9,16 +9,17 @@ void main() {
         threadId: 'thread_multimodal',
         runId: 'run_multimodal',
         messageId: 'message_multimodal',
-        content: const <AgUiMessageContentPart>[
-          AgUiTextContentPart(text: 'Please compare these artifacts.'),
-          AgUiImageContentPart(
+        content: <AgUiMessageContentPart>[
+          const AgUiTextContentPart(text: 'Please compare these artifacts.'),
+          AgUiImageContentPart.url(
             url: 'https://uploads.example.com/assets/diff.png',
             mimeType: 'image/png',
           ),
-          AgUiFileContentPart(
-            assetId: 'asset_pdf_7',
-            name: 'spec.pdf',
-            mimeType: 'application/pdf',
+          const AgUiDocumentContentPart(
+            source: AgUiInputContentSource.url(
+              value: 'https://uploads.example.com/assets/spec.pdf',
+              mimeType: 'application/pdf',
+            ),
           ),
         ],
       );
@@ -37,14 +38,19 @@ void main() {
               },
               <String, Object?>{
                 'type': 'image',
-                'url': 'https://uploads.example.com/assets/diff.png',
-                'mimeType': 'image/png',
+                'source': <String, Object?>{
+                  'type': 'url',
+                  'value': 'https://uploads.example.com/assets/diff.png',
+                  'mimeType': 'image/png',
+                },
               },
               <String, Object?>{
-                'type': 'file',
-                'assetId': 'asset_pdf_7',
-                'name': 'spec.pdf',
-                'mimeType': 'application/pdf',
+                'type': 'document',
+                'source': <String, Object?>{
+                  'type': 'url',
+                  'value': 'https://uploads.example.com/assets/spec.pdf',
+                  'mimeType': 'application/pdf',
+                },
               },
             ],
           },
@@ -61,8 +67,8 @@ void main() {
         threadId: 'thread_url_only',
         runId: 'run_url_only',
         messageId: 'message_url_only',
-        content: const <AgUiMessageContentPart>[
-          AgUiImageContentPart(
+        content: <AgUiMessageContentPart>[
+          AgUiImageContentPart.url(
             url: 'https://uploads.example.com/assets/receipt.png',
             mimeType: 'image/png',
           ),
@@ -75,8 +81,11 @@ void main() {
         <Object?>[
           <String, Object?>{
             'type': 'image',
-            'url': 'https://uploads.example.com/assets/receipt.png',
-            'mimeType': 'image/png',
+            'source': <String, Object?>{
+              'type': 'url',
+              'value': 'https://uploads.example.com/assets/receipt.png',
+              'mimeType': 'image/png',
+            },
           },
         ],
       );

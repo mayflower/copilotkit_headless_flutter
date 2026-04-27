@@ -77,7 +77,7 @@ abstract class FrontendTool {
   AgUiToolDefinition toDefinition() {
     return AgUiToolDefinition(
       name: name,
-      description: description,
+      description: description ?? '',
       parameters: parametersSchema,
     );
   }

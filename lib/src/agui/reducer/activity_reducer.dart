@@ -28,44 +28,36 @@ class ActivityReducer implements AgUiReducer {
     ThreadSession current,
     AgUiEventEnvelope event,
   ) {
-    final messageId =
-        event.stringValue('messageId') ??
-        event.stringValue('activityId') ??
-        event.stringValue('id');
-    if (messageId != null) {
-      final content = event.objectValue('content') ?? event.payload;
-      final existing = current.activities[messageId];
-      final replace = event.payload['replace'] != false;
-      final details = replace
-          ? normalizeObjectMap(content)
-          : <String, Object?>{
-              ...?existing?.details,
-              ...normalizeObjectMap(content),
-            };
-      final updated = _activityFromDetails(
-        id: messageId,
-        activityType: event.stringValue('activityType'),
-        details: details,
-        existing: existing,
-      );
-      return current.copyWith(
-        activities: <String, ActivityViewModel>{
-          ...current.activities,
-          messageId: updated,
-        },
-      );
+    final messageId = event.stringValue('messageId');
+    if (messageId == null) {
+      return current;
     }
 
+    final content = event.objectValue('content') ?? event.payload;
+    final existing = current.activities[messageId];
+    final replace = event.payload['replace'] != false;
+    final details = replace
+        ? normalizeObjectMap(content)
+        : <String, Object?>{
+            ...?existing?.details,
+            ...normalizeObjectMap(content),
+          };
+    final updated = _activityFromDetails(
+      id: messageId,
+      activityType: event.stringValue('activityType'),
+      details: details,
+      existing: existing,
+    );
     return current.copyWith(
-      activities: _activitiesFromSnapshot(event.listValue('activities')),
+      activities: <String, ActivityViewModel>{
+        ...current.activities,
+        messageId: updated,
+      },
     );
   }
 
   ThreadSession _reduceDelta(ThreadSession current, AgUiEventEnvelope event) {
-    final messageId =
-        event.stringValue('messageId') ??
-        event.stringValue('activityId') ??
-        event.stringValue('id');
+    final messageId = event.stringValue('messageId');
     final patch = event.listValue('patch');
     if (messageId != null && patch != null) {
       final existing = current.activities[messageId];
@@ -93,29 +85,7 @@ class ActivityReducer implements AgUiReducer {
       }
     }
 
-    final delta = event.objectValue('delta') ?? event.payload;
-    final activityId =
-        _readString(delta['id']) ??
-        _readString(delta['activityId']) ??
-        _readString(delta['activity_id']);
-    if (activityId == null) {
-      return current;
-    }
-
-    final existing = current.activities[activityId];
-    final details = <String, Object?>{...?existing?.details, ...delta};
-    final updated = _activityFromDetails(
-      id: activityId,
-      details: details,
-      existing: existing,
-    );
-
-    return current.copyWith(
-      activities: <String, ActivityViewModel>{
-        ...current.activities,
-        activityId: updated,
-      },
-    );
+    return current;
   }
 }
 
@@ -142,31 +112,6 @@ ActivityViewModel _activityFromDetails({
     summary: _readString(details['summary']) ?? existing?.summary,
     details: details,
   );
-}
-
-Map<String, ActivityViewModel> _activitiesFromSnapshot(List<Object?>? items) {
-  if (items == null) {
-    return const <String, ActivityViewModel>{};
-  }
-
-  final activities = <String, ActivityViewModel>{};
-  for (final item in items) {
-    if (item is! Map) {
-      continue;
-    }
-
-    final json = item.map((key, value) => MapEntry(key.toString(), value));
-    final id =
-        _readString(json['id']) ??
-        _readString(json['activityId']) ??
-        _readString(json['activity_id']);
-    if (id == null) {
-      continue;
-    }
-
-    activities[id] = _activityFromDetails(id: id, details: json);
-  }
-  return activities;
 }
 
 String? _readString(Object? value) {

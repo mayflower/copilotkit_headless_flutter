@@ -1,6 +1,6 @@
 {
   "id": "msg_multimodal",
-  "role": "developer",
+  "role": "user",
   "content": [
     {
       "type": "text",
@@ -8,14 +8,19 @@
     },
     {
       "type": "image",
-      "url": "https://cdn.example.com/images/diff.png",
-      "mimeType": "image/png"
+      "source": {
+        "type": "url",
+        "value": "https://cdn.example.com/images/diff.png",
+        "mimeType": "image/png"
+      }
     },
     {
-      "type": "file",
-      "assetId": "asset_pdf_7",
-      "name": "spec.pdf",
-      "mimeType": "application/pdf"
+      "type": "document",
+      "source": {
+        "type": "url",
+        "value": "https://cdn.example.com/spec.pdf",
+        "mimeType": "application/pdf"
+      }
     }
   ]
 }

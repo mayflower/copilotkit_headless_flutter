@@ -1,5 +1,11 @@
 ## Unreleased
 
+* Aligned AG-UI protocol models with the official upstream shapes: context
+  entries, tool definitions, multimodal input sources, activity patches,
+  reasoning events, tool-call events, and camelCase transport payloads.
+* Removed mobile-specific protocol aliases from outbound AG-UI HTTP transport
+  requests and reducer handling.
+
 ## 0.1.0
 
 * Switched package licensing to The MIT License.

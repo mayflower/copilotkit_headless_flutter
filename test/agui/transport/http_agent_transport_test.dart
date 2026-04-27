@@ -132,49 +132,44 @@ void main() {
       expect(events, ['RUN_STARTED']);
     });
 
-    test(
-      'POSTs ConnectAgentInput and preserves backend thread aliases',
-      () async {
-        final client = _RecordingStreamingClient((request) async {
-          expect(request.method, 'POST');
-          expect(
-            request.url.toString(),
-            'https://stack.example.com/api/client/copilotkit/agent/maistack_agent/connect',
-          );
-          expect(request.headers['accept'], 'text/event-stream');
-          expect(request.headers['authorization'], 'Bearer test-id-token');
-
-          final body =
-              jsonDecode((request as http.Request).body)
-                  as Map<String, Object?>;
-          expect(body['threadId'], 'thread-123');
-          expect(body['thread_id'], 'thread-123');
-
-          return _sseResponse(
-            'event: MESSAGES_SNAPSHOT\n'
-            'data: {"type":"MESSAGES_SNAPSHOT","messages":[]}\n'
-            '\n',
-          );
-        });
-
-        final transport = AgUiHttpTransport(
-          httpClient: client,
-          config: AgUiTransportConfig(
-            baseUrl: Uri.parse('https://stack.example.com'),
-            authHeaderProvider: () async => const {
-              'Authorization': 'Bearer test-id-token',
-            },
-          ),
+    test('POSTs ConnectAgentInput with official AG-UI fields', () async {
+      final client = _RecordingStreamingClient((request) async {
+        expect(request.method, 'POST');
+        expect(
+          request.url.toString(),
+          'https://stack.example.com/api/client/copilotkit/agent/maistack_agent/connect',
         );
+        expect(request.headers['accept'], 'text/event-stream');
+        expect(request.headers['authorization'], 'Bearer test-id-token');
 
-        final events = await transport
-            .connect(input: const ConnectAgentInput(threadId: 'thread-123'))
-            .toList();
+        final body =
+            jsonDecode((request as http.Request).body) as Map<String, Object?>;
+        expect(body, <String, Object?>{'threadId': 'thread-123'});
 
-        expect(events, hasLength(1));
-        expect(events.single.type, 'MESSAGES_SNAPSHOT');
-      },
-    );
+        return _sseResponse(
+          'event: MESSAGES_SNAPSHOT\n'
+          'data: {"type":"MESSAGES_SNAPSHOT","messages":[]}\n'
+          '\n',
+        );
+      });
+
+      final transport = AgUiHttpTransport(
+        httpClient: client,
+        config: AgUiTransportConfig(
+          baseUrl: Uri.parse('https://stack.example.com'),
+          authHeaderProvider: () async => const {
+            'Authorization': 'Bearer test-id-token',
+          },
+        ),
+      );
+
+      final events = await transport
+          .connect(input: const ConnectAgentInput(threadId: 'thread-123'))
+          .toList();
+
+      expect(events, hasLength(1));
+      expect(events.single.type, 'MESSAGES_SNAPSHOT');
+    });
 
     test('advertises resume support and posts resume decisions', () async {
       final client = _RecordingStreamingClient((request) async {
@@ -188,11 +183,11 @@ void main() {
 
         final body =
             jsonDecode((request as http.Request).body) as Map<String, Object?>;
-        expect(body['threadId'], 'thread-123');
-        expect(body['thread_id'], 'thread-123');
-        expect(body['interruptedRunId'], 'run-123');
-        expect(body['interrupted_run_id'], 'run-123');
-        expect(body['decision'], 'approve');
+        expect(body, <String, Object?>{
+          'threadId': 'thread-123',
+          'interruptedRunId': 'run-123',
+          'decision': 'approve',
+        });
 
         return http.StreamedResponse(
           Stream<List<int>>.fromIterable([

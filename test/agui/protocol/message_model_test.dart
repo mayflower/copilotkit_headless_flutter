@@ -9,9 +9,11 @@ void main() {
       final userMessage = AgUiMessage.fromJson(
         await loadAgUiFixture('message_user_text.json'),
       );
-      final developerMessage = AgUiMessage.fromJson(
-        await loadAgUiFixture('message_developer_multimodal.json'),
-      );
+      final developerMessage = AgUiMessage.fromJson(<String, Object?>{
+        'id': 'msg_developer',
+        'role': 'developer',
+        'content': 'Use the uploaded context.',
+      });
       final reasoningMessage = AgUiMessage.fromJson(
         await loadAgUiFixture('message_reasoning_text.json'),
       );
@@ -21,7 +23,7 @@ void main() {
       expect(reasoningMessage.role, AgUiMessageRole.reasoning);
     });
 
-    test('decodes text, image, and file content variants', () async {
+    test('decodes text, image, and document content variants', () async {
       final message = AgUiMessage.fromJson(
         await loadAgUiFixture('message_developer_multimodal.json'),
       );
@@ -30,18 +32,18 @@ void main() {
       expect(message.content, hasLength(3));
       expect(message.content[0], isA<AgUiTextContentPart>());
       expect(message.content[1], isA<AgUiImageContentPart>());
-      expect(message.content[2], isA<AgUiFileContentPart>());
+      expect(message.content[2], isA<AgUiDocumentContentPart>());
 
       final textPart = message.content[0] as AgUiTextContentPart;
       final imagePart = message.content[1] as AgUiImageContentPart;
-      final filePart = message.content[2] as AgUiFileContentPart;
+      final documentPart = message.content[2] as AgUiDocumentContentPart;
 
       expect(textPart.text, 'Please compare the attached artifacts.');
       expect(imagePart.url, 'https://cdn.example.com/images/diff.png');
       expect(imagePart.mimeType, 'image/png');
-      expect(filePart.assetId, 'asset_pdf_7');
-      expect(filePart.name, 'spec.pdf');
-      expect(filePart.mimeType, 'application/pdf');
+      expect(documentPart.source.type, AgUiInputSourceType.url);
+      expect(documentPart.url, 'https://cdn.example.com/spec.pdf');
+      expect(documentPart.mimeType, 'application/pdf');
     });
 
     test(
@@ -53,7 +55,7 @@ void main() {
 
         expect(message.toJson(), <String, Object?>{
           'id': 'msg_multimodal',
-          'role': 'developer',
+          'role': 'user',
           'content': <Object?>[
             <String, Object?>{
               'type': 'text',
@@ -61,14 +63,19 @@ void main() {
             },
             <String, Object?>{
               'type': 'image',
-              'url': 'https://cdn.example.com/images/diff.png',
-              'mimeType': 'image/png',
+              'source': <String, Object?>{
+                'type': 'url',
+                'value': 'https://cdn.example.com/images/diff.png',
+                'mimeType': 'image/png',
+              },
             },
             <String, Object?>{
-              'type': 'file',
-              'assetId': 'asset_pdf_7',
-              'name': 'spec.pdf',
-              'mimeType': 'application/pdf',
+              'type': 'document',
+              'source': <String, Object?>{
+                'type': 'url',
+                'value': 'https://cdn.example.com/spec.pdf',
+                'mimeType': 'application/pdf',
+              },
             },
           ],
         });

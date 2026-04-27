@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../agui/protocol/run_agent_input.dart';
 
 class CopilotReadable {
@@ -19,14 +21,28 @@ class CopilotReadable {
 
   AgUiContextEntry toContextEntry() {
     return AgUiContextEntry(
-      key: key,
-      value: <String, Object?>{
-        'description': description,
-        'value': value,
-        if (category != null) 'category': category,
-        if (parentKey != null) 'parentKey': parentKey,
-      },
+      description: [
+        description,
+        if (category != null) 'Category: $category',
+        if (parentKey != null) 'Parent: $parentKey',
+        'Key: $key',
+      ].join('\n'),
+      value: _contextValue(value),
     );
+  }
+}
+
+String _contextValue(Object? value) {
+  if (value == null) {
+    return '';
+  }
+  if (value is String) {
+    return value;
+  }
+  try {
+    return jsonEncode(value);
+  } on Object {
+    return value.toString();
   }
 }
 

@@ -15,7 +15,7 @@ void main() {
         envelopeFromJson(<String, Object?>{
           'type': 'TOOL_CALL_START',
           'toolCallId': 'tool-1',
-          'toolName': 'search_repo',
+          'toolCallName': 'search_repo',
         }),
       );
       expect(session.toolCalls['tool-1']?.stage, ToolCallStage.started);

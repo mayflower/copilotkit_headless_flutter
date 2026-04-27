@@ -15,10 +15,11 @@ void main() {
             role: AgUiMessageRole.user,
             content: <AgUiMessageContentPart>[
               AgUiTextContentPart(text: 'Bitte pruefe die Freigabe.'),
-              AgUiFileContentPart(
-                assetId: 'asset_42',
-                name: 'invoice.pdf',
-                mimeType: 'application/pdf',
+              AgUiDocumentContentPart(
+                source: AgUiInputContentSource.url(
+                  value: 'https://uploads.example.com/invoice.pdf',
+                  mimeType: 'application/pdf',
+                ),
               ),
             ],
           ),
@@ -34,8 +35,8 @@ void main() {
           ),
         ],
         context: const <AgUiContextEntry>[
-          AgUiContextEntry(key: 'locale', value: 'de-DE'),
-          AgUiContextEntry(key: 'platform', value: 'android'),
+          AgUiContextEntry(description: 'Locale', value: 'de-DE'),
+          AgUiContextEntry(description: 'Platform', value: 'android'),
         ],
         forwardedProps: const <String, Object?>{
           'appVersion': '1.0.0',
@@ -57,10 +58,12 @@ void main() {
                 'text': 'Bitte pruefe die Freigabe.',
               },
               <String, Object?>{
-                'type': 'file',
-                'assetId': 'asset_42',
-                'name': 'invoice.pdf',
-                'mimeType': 'application/pdf',
+                'type': 'document',
+                'source': <String, Object?>{
+                  'type': 'url',
+                  'value': 'https://uploads.example.com/invoice.pdf',
+                  'mimeType': 'application/pdf',
+                },
               },
             ],
           },
@@ -76,8 +79,8 @@ void main() {
           },
         ],
         'context': <Object?>[
-          <String, Object?>{'key': 'locale', 'value': 'de-DE'},
-          <String, Object?>{'key': 'platform', 'value': 'android'},
+          <String, Object?>{'description': 'Locale', 'value': 'de-DE'},
+          <String, Object?>{'description': 'Platform', 'value': 'android'},
         ],
         'forwardedProps': <String, Object?>{
           'appVersion': '1.0.0',

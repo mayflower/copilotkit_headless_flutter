@@ -166,7 +166,7 @@ class CopilotToolRunLoop {
           }),
         ),
       ],
-      metadata: <String, Object?>{'toolCallId': call.id, 'error': true},
+      metadata: <String, Object?>{'toolCallId': call.id, 'error': 'true'},
     );
   }
 
@@ -183,7 +183,7 @@ class CopilotToolRunLoop {
       ],
       metadata: <String, Object?>{
         'toolCallId': call.id,
-        if (isError) 'error': true,
+        if (isError) 'error': 'true',
       },
     );
   }

@@ -126,7 +126,7 @@ class CopilotAction {
   AgUiToolDefinition toToolDefinition() {
     return AgUiToolDefinition(
       name: name,
-      description: description,
+      description: description ?? '',
       parameters: parametersSchema,
     );
   }

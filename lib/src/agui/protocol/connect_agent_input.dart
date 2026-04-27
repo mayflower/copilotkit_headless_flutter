@@ -13,7 +13,6 @@ class ConnectAgentInput {
 
   Map<String, Object?> toJson() => <String, Object?>{
     'threadId': threadId,
-    'thread_id': threadId,
     if (runId != null) 'runId': runId,
     if (forwardedProps.isNotEmpty)
       'forwardedProps': normalizeObjectMap(forwardedProps),

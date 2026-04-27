@@ -88,7 +88,7 @@ AgUiMessage _toolMessage({
     ],
     metadata: <String, Object?>{
       'toolCallId': toolCallId,
-      if (isError) 'error': true,
+      if (isError) 'error': 'true',
     },
   );
 }

@@ -14,13 +14,12 @@ void main() {
         session,
         envelopeFromJson(<String, Object?>{
           'type': 'ACTIVITY_SNAPSHOT',
-          'activities': <Object?>[
-            <String, Object?>{
-              'id': 'activity-1',
-              'label': 'Search repository',
-              'status': 'running',
-            },
-          ],
+          'messageId': 'activity-1',
+          'activityType': 'search_progress',
+          'content': <String, Object?>{
+            'label': 'Search repository',
+            'status': 'running',
+          },
         }),
       );
 
@@ -31,11 +30,20 @@ void main() {
         session,
         envelopeFromJson(<String, Object?>{
           'type': 'ACTIVITY_DELTA',
-          'delta': <String, Object?>{
-            'id': 'activity-1',
-            'status': 'completed',
-            'summary': 'Found 2 matches',
-          },
+          'messageId': 'activity-1',
+          'activityType': 'search_progress',
+          'patch': <Object?>[
+            <String, Object?>{
+              'op': 'replace',
+              'path': '/status',
+              'value': 'completed',
+            },
+            <String, Object?>{
+              'op': 'add',
+              'path': '/summary',
+              'value': 'Found 2 matches',
+            },
+          ],
         }),
       );
 

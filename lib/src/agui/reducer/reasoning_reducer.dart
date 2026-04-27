@@ -8,10 +8,7 @@ class ReasoningReducer implements AgUiReducer {
   @override
   ThreadSession reduce(ThreadSession current, AgUiEventEnvelope event) {
     final messageId =
-        event.stringValue('messageId') ??
-        event.stringValue('message_id') ??
-        event.stringValue('entityId') ??
-        event.stringValue('entity_id');
+        event.stringValue('messageId') ?? event.stringValue('entityId');
     if (messageId == null && event.type != 'REASONING_ENCRYPTED_VALUE') {
       return current;
     }
@@ -72,7 +69,6 @@ ReasoningViewModel? _storeEncryptedValue(
 ) {
   final encryptedValue =
       event.stringValue('encryptedValue') ??
-      event.stringValue('encrypted_value') ??
       event.stringValue('encryptedContent');
   if (encryptedValue == null) {
     return null;
@@ -80,9 +76,7 @@ ReasoningViewModel? _storeEncryptedValue(
 
   final entityId =
       event.stringValue('entityId') ??
-      event.stringValue('entity_id') ??
       event.stringValue('messageId') ??
-      event.stringValue('message_id') ??
       'reasoning-encrypted';
   final subtype = event.stringValue('subtype') ?? 'value';
   final base = current.reasoning[entityId] ?? ReasoningViewModel(id: entityId);

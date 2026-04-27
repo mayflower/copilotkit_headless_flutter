@@ -1,4 +1,5 @@
 {
-  "type": "REASONING_SUMMARY",
-  "summary": "Compared the latest draft against the uploaded contract."
+  "type": "REASONING_MESSAGE_CONTENT",
+  "messageId": "reasoning_1",
+  "delta": "Compared the latest draft against the uploaded contract."
 }

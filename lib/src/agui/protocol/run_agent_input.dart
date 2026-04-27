@@ -1,13 +1,13 @@
 import 'agui_message.dart';
 
 class AgUiContextEntry {
-  const AgUiContextEntry({required this.key, required this.value});
+  const AgUiContextEntry({required this.description, required this.value});
 
-  final String key;
-  final Object? value;
+  final String description;
+  final String value;
 
   Map<String, Object?> toJson() => <String, Object?>{
-    'key': key,
+    'description': description,
     'value': value,
   };
 }
@@ -15,18 +15,21 @@ class AgUiContextEntry {
 class AgUiToolDefinition {
   const AgUiToolDefinition({
     required this.name,
-    this.description,
+    required this.description,
     this.parameters,
+    this.metadata,
   });
 
   final String name;
-  final String? description;
-  final Map<String, Object?>? parameters;
+  final String description;
+  final Object? parameters;
+  final Map<String, Object?>? metadata;
 
   Map<String, Object?> toJson() => <String, Object?>{
     'name': name,
-    if (description != null) 'description': description,
+    'description': description,
     if (parameters != null) 'parameters': parameters,
+    if (metadata != null && metadata!.isNotEmpty) 'metadata': metadata,
   };
 }
 

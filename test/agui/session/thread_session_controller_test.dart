@@ -56,7 +56,7 @@ void main() {
               envelopeFromJson(<String, Object?>{
                 'type': 'TOOL_CALL_START',
                 'toolCallId': 'tool-1',
-                'toolName': 'search_repo',
+                'toolCallName': 'search_repo',
               }, receivedAt: baseTime.add(const Duration(seconds: 4))),
               envelopeFromJson(<String, Object?>{
                 'type': 'TOOL_CALL_ARGS',
@@ -70,20 +70,24 @@ void main() {
               }, receivedAt: baseTime.add(const Duration(seconds: 6))),
               envelopeFromJson(<String, Object?>{
                 'type': 'ACTIVITY_SNAPSHOT',
-                'activities': <Object?>[
-                  <String, Object?>{
-                    'id': 'activity-1',
-                    'label': 'Search repository',
-                    'status': 'running',
-                  },
-                ],
+                'messageId': 'activity-1',
+                'activityType': 'task',
+                'content': <String, Object?>{
+                  'label': 'Search repository',
+                  'status': 'running',
+                },
               }, receivedAt: baseTime.add(const Duration(seconds: 7))),
               envelopeFromJson(<String, Object?>{
                 'type': 'ACTIVITY_DELTA',
-                'delta': <String, Object?>{
-                  'id': 'activity-1',
-                  'status': 'completed',
-                },
+                'messageId': 'activity-1',
+                'activityType': 'task',
+                'patch': <Object?>[
+                  <String, Object?>{
+                    'op': 'replace',
+                    'path': '/status',
+                    'value': 'completed',
+                  },
+                ],
               }, receivedAt: baseTime.add(const Duration(seconds: 8))),
               envelopeFromJson(<String, Object?>{
                 'type': 'RUN_FINISHED',

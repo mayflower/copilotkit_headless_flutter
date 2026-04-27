@@ -78,7 +78,8 @@ void main() {
         expect(input.threadId, 'thread-1');
         expect(input.runId, 'run-1');
         expect(input.forwardedProps, <String, Object?>{'tenant': 'mai'});
-        expect(input.context.single.key, 'selection');
+        expect(input.context.single.description, contains('Key: selection'));
+        expect(input.context.single.value, '{"id":"asset-1"}');
         expect(input.tools.map((tool) => tool.name), <String>['show_toast']);
         expect(controller.inProgress, isFalse);
         expect(controller.messages.single.id, 'message-1');

@@ -84,12 +84,7 @@ class AgUiHttpTransport implements AgentTransport {
   Future<void> abort({required String threadId, required String runId}) async {
     await _postJsonControl(
       endpoint: _config.abortUri,
-      payload: <String, Object?>{
-        'threadId': threadId,
-        'thread_id': threadId,
-        'runId': runId,
-        'run_id': runId,
-      },
+      payload: <String, Object?>{'threadId': threadId, 'runId': runId},
     );
   }
 
@@ -97,9 +92,7 @@ class AgUiHttpTransport implements AgentTransport {
   Future<AgUiResumeResult> resume(AgUiResumeRequest request) async {
     final payload = <String, Object?>{
       'threadId': request.threadId,
-      'thread_id': request.threadId,
       'interruptedRunId': request.interruptedRunId,
-      'interrupted_run_id': request.interruptedRunId,
       ...request.payload,
     };
     final response = await _postJsonControl(
@@ -108,14 +101,8 @@ class AgUiHttpTransport implements AgentTransport {
     );
 
     return AgUiResumeResult(
-      threadId:
-          _readString(response, 'threadId') ??
-          _readString(response, 'thread_id') ??
-          request.threadId,
-      runId:
-          _readString(response, 'runId') ??
-          _readString(response, 'run_id') ??
-          request.interruptedRunId,
+      threadId: _readString(response, 'threadId') ?? request.threadId,
+      runId: _readString(response, 'runId') ?? request.interruptedRunId,
     );
   }
 

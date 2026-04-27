@@ -36,7 +36,7 @@ void main() {
       expect(event, isA<ToolCallStartEvent>());
       final typed = event as ToolCallStartEvent;
       expect(typed.toolCallId, 'tool_call_1');
-      expect(typed.toolName, 'pick_file');
+      expect(typed.toolCallName, 'pick_file');
     });
 
     test('decodes state events to typed variants', () async {
@@ -56,7 +56,9 @@ void main() {
 
       expect(event, isA<ActivityDeltaEvent>());
       final typed = event as ActivityDeltaEvent;
-      expect(typed.delta['status'], 'running');
+      expect(typed.messageId, 'activity_1');
+      expect(typed.activityType, 'task');
+      expect(typed.patch, hasLength(2));
     });
 
     test('decodes reasoning events to typed variants', () async {
@@ -64,10 +66,11 @@ void main() {
         await loadAgUiFixture('reasoning_summary.json'),
       );
 
-      expect(event, isA<ReasoningSummaryEvent>());
-      final typed = event as ReasoningSummaryEvent;
+      expect(event, isA<ReasoningMessageContentEvent>());
+      final typed = event as ReasoningMessageContentEvent;
+      expect(typed.messageId, 'reasoning_1');
       expect(
-        typed.summary,
+        typed.delta,
         'Compared the latest draft against the uploaded contract.',
       );
     });

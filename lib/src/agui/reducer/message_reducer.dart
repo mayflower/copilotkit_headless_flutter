@@ -21,7 +21,6 @@ class MessageReducer implements AgUiReducer {
             UiMessage(
               id:
                   event.stringValue('messageId') ??
-                  event.stringValue('message_id') ??
                   'message-${current.messages.length + 1}',
               role: _roleFromWire(event.stringValue('role')),
               text: '',
@@ -33,7 +32,6 @@ class MessageReducer implements AgUiReducer {
       case 'TEXT_MESSAGE_CHUNK':
         final messageId =
             event.stringValue('messageId') ??
-            event.stringValue('message_id') ??
             'message-${current.messages.length + 1}';
         final delta =
             _readRawString(event.payload['delta']) ??
@@ -73,8 +71,7 @@ class MessageReducer implements AgUiReducer {
           ],
         );
       case 'TEXT_MESSAGE_END':
-        final messageId =
-            event.stringValue('messageId') ?? event.stringValue('message_id');
+        final messageId = event.stringValue('messageId');
         if (messageId == null) {
           return current;
         }
@@ -132,13 +129,14 @@ String _flattenMessageContent(List<AgUiMessageContentPart> parts) {
         if (text.trim().isNotEmpty) {
           buffer.add(text);
         }
-      case AgUiFileContentPart(:final name):
-        if (name.trim().isNotEmpty) {
-          buffer.add(name);
-        }
-      case AgUiImageContentPart(:final url):
+      case AgUiSourcedContentPart(:final url):
         if (url.trim().isNotEmpty) {
           buffer.add(url);
+        }
+      case AgUiBinaryContentPart(:final filename, :final url, :final id):
+        final label = filename ?? url ?? id;
+        if (label != null && label.trim().isNotEmpty) {
+          buffer.add(label);
         }
     }
   }
