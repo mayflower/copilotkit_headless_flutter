@@ -17,7 +17,7 @@ void main() {
         expect(request.method, 'POST');
         expect(
           request.url.toString(),
-          'https://stack.example.com/api/mobile/agui/run',
+          'https://stack.example.com/api/client/copilotkit/agent/maistack_agent/run',
         );
         expect(request.headers['accept'], 'text/event-stream');
         expect(request.headers['authorization'], 'Bearer test-id-token');
@@ -139,7 +139,7 @@ void main() {
           expect(request.method, 'POST');
           expect(
             request.url.toString(),
-            'https://stack.example.com/api/mobile/agui/connect',
+            'https://stack.example.com/api/client/copilotkit/agent/maistack_agent/connect',
           );
           expect(request.headers['accept'], 'text/event-stream');
           expect(request.headers['authorization'], 'Bearer test-id-token');
@@ -181,7 +181,7 @@ void main() {
         expect(request.method, 'POST');
         expect(
           request.url.toString(),
-          'https://stack.example.com/api/mobile/agui/resume',
+          'https://stack.example.com/api/client/copilotkit/agent/maistack_agent/resume',
         );
         expect(request.headers['authorization'], 'Bearer test-id-token');
         expect(request.headers['content-type'], 'application/json');
@@ -207,6 +207,7 @@ void main() {
         httpClient: client,
         config: AgUiTransportConfig(
           baseUrl: Uri.parse('https://stack.example.com'),
+          supportsResume: true,
           authHeaderProvider: () async => const {
             'Authorization': 'Bearer test-id-token',
           },

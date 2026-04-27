@@ -4,11 +4,12 @@ class AgUiTransportConfig {
   const AgUiTransportConfig({
     required this.baseUrl,
     required this.authHeaderProvider,
-    this.runPath = '/api/mobile/agui/run',
-    this.connectPath = '/api/mobile/agui/connect',
-    this.resumePath = '/api/mobile/agui/resume',
-    this.abortPath = '/api/mobile/agui/abort',
-    this.supportsResume = true,
+    this.agentId = defaultAgentId,
+    this.runPath = '/api/client/copilotkit/agent/maistack_agent/run',
+    this.connectPath = '/api/client/copilotkit/agent/maistack_agent/connect',
+    this.resumePath = '/api/client/copilotkit/agent/maistack_agent/resume',
+    this.abortPath = '/api/client/copilotkit/agent/maistack_agent/stop',
+    this.supportsResume = false,
     this.supportsAbort = false,
     this.supportsFrontendTools = false,
     this.supportedFrontendTools = const <String>{},
@@ -17,8 +18,11 @@ class AgUiTransportConfig {
     this.controlTimeout = const Duration(seconds: 30),
   });
 
+  static const defaultAgentId = 'maistack_agent';
+
   final Uri baseUrl;
   final AgUiAuthHeaderProvider authHeaderProvider;
+  final String agentId;
   final String runPath;
   final String connectPath;
   final String resumePath;
