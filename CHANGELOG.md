@@ -3,6 +3,8 @@
 * Aligned AG-UI protocol models with the official upstream shapes: context
   entries, tool definitions, multimodal input sources, activity patches,
   reasoning events, tool-call events, and camelCase transport payloads.
+* Added typed accessors for current AG-UI RAW/CUSTOM payload fields and
+  RUN_FINISHED results while retaining legacy data/payload accessors.
 * Removed mobile-specific protocol aliases from outbound AG-UI HTTP transport
   requests and reducer handling.
 

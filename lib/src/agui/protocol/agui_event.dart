@@ -94,12 +94,17 @@ sealed class AgUiEvent {
       ),
       'RAW' => RawAgUiEvent(
         rawJson: normalized,
-        data: normalizeObjectMap(normalized['data']),
+        event: normalized.containsKey('event')
+            ? normalized['event']
+            : normalized['data'],
+        source: normalizeString(normalized['source']),
       ),
       'CUSTOM' => CustomAgUiEvent(
         rawJson: normalized,
         name: normalizeString(normalized['name']) ?? '',
-        payload: normalizeObjectMap(normalized['payload']),
+        value: normalized.containsKey('value')
+            ? normalized['value']
+            : normalized['payload'],
       ),
       'RUN_STARTED' => RunStartedEvent(
         rawJson: normalized,
@@ -110,6 +115,7 @@ sealed class AgUiEvent {
         rawJson: normalized,
         threadId: normalizeString(normalized['threadId']) ?? '',
         runId: normalizeString(normalized['runId']) ?? '',
+        result: normalized['result'],
       ),
       'RUN_ERROR' => RunErrorEvent(
         rawJson: normalized,
@@ -330,21 +336,33 @@ class ActivityDeltaEvent extends AgUiEvent {
 }
 
 class RawAgUiEvent extends AgUiEvent {
-  const RawAgUiEvent({required super.rawJson, required this.data})
-    : super(type: 'RAW');
+  const RawAgUiEvent({
+    required super.rawJson,
+    Object? event,
+    Map<String, Object?>? data,
+    this.source,
+  }) : event = event ?? data,
+       super(type: 'RAW');
 
-  final Map<String, Object?> data;
+  final Object? event;
+  final String? source;
+
+  Map<String, Object?> get data => normalizeObjectMap(event);
 }
 
 class CustomAgUiEvent extends AgUiEvent {
   const CustomAgUiEvent({
     required super.rawJson,
     required this.name,
-    required this.payload,
-  }) : super(type: 'CUSTOM');
+    Object? value,
+    Map<String, Object?>? payload,
+  }) : value = value ?? payload,
+       super(type: 'CUSTOM');
 
   final String name;
-  final Map<String, Object?> payload;
+  final Object? value;
+
+  Map<String, Object?> get payload => normalizeObjectMap(value);
 }
 
 class RunStartedEvent extends AgUiEvent {
@@ -363,10 +381,12 @@ class RunFinishedEvent extends AgUiEvent {
     required super.rawJson,
     required this.threadId,
     required this.runId,
+    this.result,
   }) : super(type: 'RUN_FINISHED');
 
   final String threadId;
   final String runId;
+  final Object? result;
 }
 
 class RunErrorEvent extends AgUiEvent {

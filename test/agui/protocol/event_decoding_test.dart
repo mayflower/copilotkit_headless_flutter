@@ -87,8 +87,45 @@ void main() {
       final typedRaw = rawEvent as RawAgUiEvent;
       final typedCustom = customEvent as CustomAgUiEvent;
       expect(typedRaw.data['traceId'], 'trace_123');
+      expect(typedRaw.event, isA<Map<String, Object?>>());
+      expect(typedRaw.source, isNull);
       expect(typedCustom.name, 'MOBILE_HINT');
       expect(typedCustom.payload['hint'], 'focusComposer');
+      expect(typedCustom.value, isA<Map<String, Object?>>());
+    });
+
+    test('decodes current raw custom and finished result fields', () {
+      final raw =
+          AgUiEvent.fromJson(<String, Object?>{
+                'type': 'RAW',
+                'event': <String, Object?>{'traceId': 'trace_456'},
+                'source': 'agent',
+              })
+              as RawAgUiEvent;
+      expect(raw.event, <String, Object?>{'traceId': 'trace_456'});
+      expect(raw.source, 'agent');
+      expect(raw.data['traceId'], 'trace_456');
+
+      final custom =
+          AgUiEvent.fromJson(<String, Object?>{
+                'type': 'CUSTOM',
+                'name': 'MOBILE_HINT',
+                'value': <String, Object?>{'hint': 'openPanel'},
+              })
+              as CustomAgUiEvent;
+      expect(custom.name, 'MOBILE_HINT');
+      expect(custom.value, <String, Object?>{'hint': 'openPanel'});
+      expect(custom.payload['hint'], 'openPanel');
+
+      final finished =
+          AgUiEvent.fromJson(<String, Object?>{
+                'type': 'RUN_FINISHED',
+                'threadId': 'thread_demo',
+                'runId': 'run_demo',
+                'result': <String, Object?>{'status': 'ok'},
+              })
+              as RunFinishedEvent;
+      expect(finished.result, <String, Object?>{'status': 'ok'});
     });
 
     test('preserves unknown events instead of dropping them', () async {
