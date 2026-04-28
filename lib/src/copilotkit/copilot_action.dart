@@ -27,17 +27,25 @@ enum CopilotActionParameterType {
 class CopilotActionExecutionContext {
   const CopilotActionExecutionContext({
     this.cancelToken,
+    this.threadId,
+    this.runId,
+    this.parentRunId,
+    this.idToken,
     this.metadata = const <String, Object?>{},
   });
 
   final AgUiTransportCancellationToken? cancelToken;
+  final String? threadId;
+  final String? runId;
+  final String? parentRunId;
+  final String? idToken;
   final Map<String, Object?> metadata;
 }
 
 class CopilotActionResult {
   const CopilotActionResult({this.payload = const <String, Object?>{}});
 
-  final Map<String, Object?> payload;
+  final Object? payload;
 }
 
 class CopilotActionParameter {
@@ -224,7 +232,14 @@ class _CopilotActionFrontendTool extends FrontendTool {
   }) async {
     final result = await action.handler(
       args,
-      CopilotActionExecutionContext(cancelToken: cancelToken),
+      CopilotActionExecutionContext(
+        cancelToken: cancelToken,
+        threadId: context.threadId,
+        runId: context.runId,
+        parentRunId: context.parentRunId,
+        idToken: context.idToken,
+        metadata: context.metadata,
+      ),
     );
     return FrontendToolExecutionResult(payload: result.payload);
   }

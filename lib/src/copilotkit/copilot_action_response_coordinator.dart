@@ -17,7 +17,7 @@ class CopilotActionResponseRequest {
   final String toolName;
   final Map<String, Object?> arguments;
   final CopilotActionResponseStatus status;
-  final Map<String, Object?>? response;
+  final Object? response;
 
   CopilotActionResponseRequest copyWith({
     CopilotActionResponseStatus? status,
@@ -28,9 +28,7 @@ class CopilotActionResponseRequest {
       toolName: toolName,
       arguments: arguments,
       status: status ?? this.status,
-      response: identical(response, _unset)
-          ? this.response
-          : response as Map<String, Object?>?,
+      response: identical(response, _unset) ? this.response : response,
     );
   }
 }
@@ -38,8 +36,15 @@ class CopilotActionResponseRequest {
 class CopilotActionResponseCoordinator {
   final Map<String, CopilotActionResponseRequest> _requests =
       <String, CopilotActionResponseRequest>{};
-  final Map<String, Completer<Map<String, Object?>>> _completers =
-      <String, Completer<Map<String, Object?>>>{};
+  final Map<String, Completer<Object?>> _completers =
+      <String, Completer<Object?>>{};
+  final StreamController<List<CopilotActionResponseRequest>>
+  _requestsController =
+      StreamController<List<CopilotActionResponseRequest>>.broadcast();
+
+  Stream<List<CopilotActionResponseRequest>> get requestsStream {
+    return _requestsController.stream;
+  }
 
   List<CopilotActionResponseRequest> get pendingRequests {
     return _requests.values
@@ -53,13 +58,13 @@ class CopilotActionResponseCoordinator {
     return _requests[toolCallId];
   }
 
-  Future<Map<String, Object?>> waitForResponse(ToolCallViewModel call) {
+  Future<Object?> waitForResponse(ToolCallViewModel call) {
     final existing = _completers[call.id];
     if (existing != null) {
       return existing.future;
     }
 
-    final completer = Completer<Map<String, Object?>>();
+    final completer = Completer<Object?>();
     _completers[call.id] = completer;
     _requests[call.id] = CopilotActionResponseRequest(
       toolCallId: call.id,
@@ -67,10 +72,11 @@ class CopilotActionResponseCoordinator {
       arguments: Map<String, Object?>.unmodifiable(call.arguments),
       status: CopilotActionResponseStatus.waiting,
     );
+    _publishRequests();
     return completer.future;
   }
 
-  bool complete(String toolCallId, Map<String, Object?> response) {
+  bool complete(String toolCallId, Object? response) {
     final completer = _completers.remove(toolCallId);
     if (completer == null || completer.isCompleted) {
       return false;
@@ -85,9 +91,10 @@ class CopilotActionResponseCoordinator {
                 ))
             .copyWith(
               status: CopilotActionResponseStatus.completed,
-              response: Map<String, Object?>.unmodifiable(response),
+              response: _freezeResponse(response),
             );
-    completer.complete(Map<String, Object?>.unmodifiable(response));
+    completer.complete(_freezeResponse(response));
+    _publishRequests();
     return true;
   }
 
@@ -115,7 +122,37 @@ class CopilotActionResponseCoordinator {
               response: response,
             );
     completer.complete(response);
+    _publishRequests();
     return true;
+  }
+
+  void cancelAll([String message = 'Action response was cancelled.']) {
+    for (final toolCallId in _completers.keys.toList(growable: false)) {
+      reject(toolCallId, message);
+    }
+  }
+
+  void dispose() {
+    _requestsController.close();
+  }
+
+  Object? _freezeResponse(Object? response) {
+    if (response is Map<String, Object?>) {
+      return Map<String, Object?>.unmodifiable(response);
+    }
+    if (response is List<Object?>) {
+      return List<Object?>.unmodifiable(response);
+    }
+    return response;
+  }
+
+  void _publishRequests() {
+    if (_requestsController.isClosed) {
+      return;
+    }
+    _requestsController.add(
+      List<CopilotActionResponseRequest>.unmodifiable(pendingRequests),
+    );
   }
 }
 

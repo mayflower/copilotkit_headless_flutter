@@ -43,13 +43,25 @@ class FrontendToolAvailabilityContext {
 }
 
 class FrontendToolExecutionContext {
-  const FrontendToolExecutionContext();
+  const FrontendToolExecutionContext({
+    this.threadId,
+    this.runId,
+    this.parentRunId,
+    this.idToken,
+    this.metadata = const <String, Object?>{},
+  });
+
+  final String? threadId;
+  final String? runId;
+  final String? parentRunId;
+  final String? idToken;
+  final Map<String, Object?> metadata;
 }
 
 class FrontendToolExecutionResult {
   const FrontendToolExecutionResult({this.payload = const <String, Object?>{}});
 
-  final Map<String, Object?> payload;
+  final Object? payload;
 }
 
 abstract class FrontendTool {

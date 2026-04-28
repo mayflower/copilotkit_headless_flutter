@@ -166,15 +166,12 @@ class CopilotToolRunLoop {
           }),
         ),
       ],
-      metadata: <String, Object?>{'toolCallId': call.id, 'error': 'true'},
+      metadata: <String, Object?>{'toolCallId': call.id, 'error': true},
     );
   }
 
-  AgUiMessage _toolMessage(
-    ToolCallViewModel call,
-    Map<String, Object?> payload,
-  ) {
-    final isError = payload['error'] != null;
+  AgUiMessage _toolMessage(ToolCallViewModel call, Object? payload) {
+    final isError = payload is Map<String, Object?> && payload['error'] != null;
     return AgUiMessage(
       id: _messageIdFactory(call),
       role: AgUiMessageRole.tool,
@@ -183,7 +180,7 @@ class CopilotToolRunLoop {
       ],
       metadata: <String, Object?>{
         'toolCallId': call.id,
-        if (isError) 'error': 'true',
+        if (isError) 'error': true,
       },
     );
   }

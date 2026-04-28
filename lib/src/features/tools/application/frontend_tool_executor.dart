@@ -77,7 +77,7 @@ class FrontendToolExecutor {
 AgUiMessage _toolMessage({
   required String? messageId,
   required String toolCallId,
-  required Map<String, Object?> payload,
+  required Object? payload,
   bool isError = false,
 }) {
   return AgUiMessage(
@@ -88,7 +88,7 @@ AgUiMessage _toolMessage({
     ],
     metadata: <String, Object?>{
       'toolCallId': toolCallId,
-      if (isError) 'error': 'true',
+      if (isError) 'error': true,
     },
   );
 }
